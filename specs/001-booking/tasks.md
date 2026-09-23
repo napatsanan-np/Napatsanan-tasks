@@ -20,7 +20,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/config.py, backend/app/db/session.py
 - ต้องทำหลัง: T-01
 - เสร็จเมื่อ: สร้าง engine/session จากตัวแปร DATABASE_URL ได้ และชี้ไป sqlite in-memory ได้ตอนทดสอบ
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-03 สร้าง migration และเตรียมฐานข้อมูลทดสอบ
 - รองรับ: CON-TECH-01
@@ -28,7 +28,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/db/migrations/001_init.py, backend/tests/conftest.py, backend/pytest.ini
 - ต้องทำหลัง: T-02
 - เสร็จเมื่อ: รัน `cd backend && pytest` แล้ว fixture สร้างตาราง slots, bookings, audit_logs สำเร็จโดยไม่มี error
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-04 สร้างตัวตรวจสอบผลยืนยันตัวตน
 - รองรับ: IF-IDP-01
@@ -36,7 +36,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/auth/idp.py
 - ต้องทำหลัง: ไม่มี
 - เสร็จเมื่อ: มี dependency ที่ endpoint เรียกใช้เพื่อตรวจผลยืนยันตัวตนก่อนเข้าถึงข้อมูล และ test ยืนยันว่า request ที่ไม่มีผลยืนยันตัวตนถูกปฏิเสธ
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-05 สร้าง GET /slots หาช่วงเวลาว่างตามแพ็กเกจ
 - รองรับ: FR-BKG-01, FR-BKG-06
@@ -44,7 +44,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/slots/router.py, backend/app/slots/service.py, backend/app/main.py
 - ต้องทำหลัง: T-03, T-04
 - เสร็จเมื่อ: เรียก GET /slots?date_from=...&package_code=... แล้วได้รายการช่วงเวลาภายใน 30 วันพร้อมที่นั่งคงเหลือ และเปลี่ยน package_code แล้วผลลัพธ์เปลี่ยนตาม
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-06 ทดสอบสมรรถนะ GET /slots แบบย่อส่วน
 - รองรับ: NFR-PERF-01
@@ -52,7 +52,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/tests/test_AC_BKG_05.py
 - ต้องทำหลัง: T-05
 - เสร็จเมื่อ: test_AC_BKG_05 ผ่าน (ยิงคำขอพร้อมกันแบบย่อส่วนใน Codespace แล้วดู p95 ในสภาพแวดล้อมทดสอบนี้ ผลจริงต้องวัดซ้ำบนเครื่องทดสอบตามที่ plan.md ระบุ)
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-07 สร้าง POST /bookings พื้นฐาน
 - รองรับ: FR-BKG-04
@@ -60,7 +60,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/booking/router.py, backend/app/booking/service.py, backend/app/main.py
 - ต้องทำหลัง: T-05
 - เสร็จเมื่อ: POST /bookings ด้วย slot_id ที่ว่าง บันทึกแถวใน bookings และลด remaining ของ slot นั้นลง 1 สำเร็จ
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-08 กันจองซ้ำวันเดียวกัน
 - รองรับ: FR-BKG-02, ASM-02
@@ -68,7 +68,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/booking/service.py, backend/tests/test_AC_BKG_02.py
 - ต้องทำหลัง: T-07
 - เสร็จเมื่อ: test_AC_BKG_02 ผ่าน
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-09 เสนอช่วงเวลาใกล้เคียงเมื่อช่วงที่เลือกเต็ม
 - รองรับ: FR-BKG-03
@@ -76,7 +76,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/booking/service.py, backend/app/booking/router.py, backend/tests/test_AC_BKG_03.py
 - ต้องทำหลัง: T-08
 - เสร็จเมื่อ: test_AC_BKG_03 ผ่าน
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-10 สร้าง GET /bookings/{id} แสดงรายละเอียดการจอง
 - รองรับ: FR-BKG-05
@@ -84,7 +84,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/booking/router.py, backend/app/booking/service.py
 - ต้องทำหลัง: T-07
 - เสร็จเมื่อ: เรียก GET /bookings/{id} แล้วได้รายละเอียดการจองของ booking นั้นกลับมา
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-11 สร้างคิวส่งข้อความยืนยันแบบ asynchronous
 - รองรับ: IF-NOT-01
@@ -92,7 +92,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/notify/queue.py
 - ต้องทำหลัง: T-07
 - เสร็จเมื่อ: มีฟังก์ชันวางงานส่งข้อความลงคิว (จำลองในหน่วยความจำตอนทดสอบ) และ POST /bookings ไม่ต้องรอฟังก์ชันนี้ทำงานเสร็จก่อนตอบกลับ
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-12 ส่งซ้ำเมื่อส่งข้อความไม่สำเร็จ
 - รองรับ: FR-BKG-05, NFR-REL-02, ASM-03
@@ -100,7 +100,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/notify/queue.py, backend/app/booking/service.py, backend/tests/test_AC_BKG_04.py
 - ต้องทำหลัง: T-11
 - เสร็จเมื่อ: test_AC_BKG_04 ผ่าน
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-13 สร้าง audit log middleware
 - รองรับ: DOM-PDPA-01
@@ -108,7 +108,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/audit/middleware.py, backend/app/main.py, backend/tests/test_AC_BKG_06.py
 - ต้องทำหลัง: T-04, T-10
 - เสร็จเมื่อ: test_AC_BKG_06 ผ่าน
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-14 สร้าง GET /patients/lookup ค้น HN จาก HIS
 - รองรับ: IF-HIS-01
@@ -116,7 +116,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - ไฟล์ที่แตะ: backend/app/his/client.py, backend/app/main.py
 - ต้องทำหลัง: T-04
 - เสร็จเมื่อ: เรียก GET /patients/lookup ด้วยเลขบัตรประชาชนแล้วได้ hn กลับมา และไม่มีการเก็บเลขบัตรประชาชนลงฐานข้อมูลของระบบนี้
-- สถานะ: พร้อมทำ
+- สถานะ: เสร็จ รอทีมตรวจ (รอรันเทสยืนยันด้วย เพราะเครื่องนี้ไม่มี Python ติดตั้งจริง)
 
 ### T-15 ออกหมายเลขคิว
 - รองรับ: FR-BKG-04
@@ -193,3 +193,7 @@ Feature: SPEC-BKG-001 | อ้างอิง: spec.md (Draft v2), plan.md (plan
 - FR-BKG-06 ยังไม่มี AC ใน spec.md (ตามที่ plan.md ข้อ 6 ระบุไว้) จึงยังไม่มี task ทดสอบเฉพาะสำหรับ FR-BKG-06
   โดยตรง งานที่รองรับ FR-BKG-06 (T-05, T-17, T-20) ทำได้ตามหน้าที่ทั่วไป แต่ไม่มี AC ID ให้อ้างอิงตรวจผล
   ทีมควรพิจารณาเพิ่ม AC สำหรับ FR-BKG-06 หากต้องการทดสอบอย่างเป็นทางการ
+- **บล็อกใหม่ (พบตอน /implement T-17, 2569-09-23)**: plan.md ระบุว่าโฟลเดอร์ `frontend/` มีโครง Vite +
+  React + Tailwind + Vitest ตั้งไว้ให้แล้ว แต่ในเครื่องจริงไม่มีโฟลเดอร์ `frontend/` เลย (ไม่มี package.json,
+  vite.config.js ฯลฯ) ทีมสั่งให้หยุดงาน T-17–T-20 ไว้ก่อนจนกว่าจะตัดสินใจว่าจะสร้างโครงโปรเจกต์เองในเซสชันถัดไป
+  หรือทีมจะสร้างเตรียมไว้ให้ก่อน — T-17 ถึง T-20 ยังคงสถานะ "พร้อมทำ" ตามเดิม (ยังไม่ได้เริ่ม ไม่ใช่ติด Q-xx)
