@@ -110,3 +110,27 @@ test_T14_his_lookup.py
 **พบบล็อกใหม่ตอนเริ่ม T-17**: plan.md บอกว่ามีโครง frontend/ (Vite+React+Tailwind+Vitest) ให้แล้ว แต่ในเครื่อง
 จริงไม่มีโฟลเดอร์ frontend/ เลย ถามทีมแล้วสั่งให้ "หยุดงาน frontend ไว้ก่อน" — T-17 ถึง T-20 ยังไม่ได้เริ่ม
 (สถานะยังเป็น "พร้อมทำ" ไม่ใช่ติด Q-xx) บันทึกบล็อกนี้ไว้ในหัวข้อ "สิ่งที่ยังไม่ทำ" ของ tasks.md แล้ว
+
+## 2569-09-23 — ทีมรัน pytest จริงและช่วยดีบักจนผ่านครบ (T-01 ถึง T-14)
+ทีมติดตั้ง Python 3.14.7 เองแล้วรัน `python -m pip install -r requirements.txt` และ `python -m pytest -v`
+เจอ error 2 รอบ ต้องแก้ backend/app/db/session.py เพิ่มอีก (ไฟล์เดิมที่ทีมอนุมัติให้ขยายไว้แล้วตอน T-05)
+
+**รอบที่ 1 (10 failed)**: sqlite in-memory ที่ผูกกับ StaticPool เจอ "no such table" เพราะ FastAPI รันแต่ละ
+request ใน thread ของ threadpool (ผ่าน anyio.to_thread.run_sync) แต่ sqlite in-memory เชื่อม connection
+แยกตาม thread โดยปริยาย ทำให้ thread ที่รับ request เห็นฐานข้อมูลคนละก้อนที่ยังไม่ได้ migrate — แก้ด้วยการเพิ่ม
+connect_args={"check_same_thread": False} + poolclass=StaticPool ใน get_engine() เฉพาะตอน URL เป็น sqlite
+
+ระหว่างแก้ยังพบ DeprecationWarning ของ datetime.utcnow() (Python 3.14 เตือนว่าจะถูกถอดในอนาคต) เลยแก้ไปด้วย
+เปลี่ยนเป็น datetime.now(timezone.utc) ใน backend/app/db/models.py, backend/app/notify/queue.py และ
+backend/tests/test_AC_BKG_04.py (ไฟล์เดิมของ T-01/T-11-T-12 ที่เคยแก้อยู่แล้ว ไม่ได้แตะไฟล์ใหม่)
+
+**รอบที่ 2 (1 failed: test_AC_BKG_05)**: หลัง fix รอบแรก StaticPool ทำให้ทุก thread ใช้ sqlite connection
+เดียวกันจริง แต่พอมี 20 thread ยิง cursor.execute() พร้อมกันตรง ๆ (จำลองผู้ใช้พร้อมกันของ AC-BKG-05) เจอ
+sqlite3.InterfaceError: bad parameter or other API misuse ซึ่งเป็นข้อจำกัดที่รู้จักของ sqlite3 module เวลามี
+หลาย thread เรียก cursor เดียวกันพร้อมกันจริง ๆ (ไม่ใช่บั๊กของโค้ด business logic) — แก้ด้วยการเพิ่ม
+threading.Lock ใน get_db() (backend/app/db/session.py) ให้ทำงานทีละ request เฉพาะตอนใช้ sqlite เท่านั้น
+(PostgreSQL จริงมี connection pool ของตัวเองอยู่แล้ว ไม่ต้องล็อก ไม่กระทบพฤติกรรม production)
+
+**ผลสุดท้าย**: `python -m pytest -v` ผ่านครบ **22/22** เหลือ warning เดียว (StarletteDeprecationWarning เรื่อง
+httpx ผ่าน starlette.testclient จะเลิกใช้ในอนาคต) ยังไม่ได้แก้เพราะเป็นแค่คำเตือนของ dependency ไม่กระทบผลทดสอบ
+อัปเดตสถานะ T-01 ถึง T-14 ใน tasks.md เป็น "เสร็จ รอทีมตรวจ (รันเทสจริงแล้ว ผ่านทั้งหมด 22/22)" ทุกตัวแล้ว

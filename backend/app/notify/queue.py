@@ -8,7 +8,7 @@ requirements.txt และ "ไฟล์ที่แตะ" ของ T-11/T-12 
 """
 from collections import deque
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 MAX_ATTEMPTS = 3  # ASM-03: ส่งซ้ำสูงสุด 3 ครั้ง
 RETRY_INTERVAL = timedelta(minutes=5)  # ASM-03, NFR-REL-02: ห่างกัน/ภายใน 5 นาที
@@ -78,6 +78,6 @@ def send_confirmation(
             job.scheduled_at = None
         else:
             job.status = "pending_retry"
-            job.scheduled_at = datetime.utcnow() + RETRY_INTERVAL
+            job.scheduled_at = datetime.now(timezone.utc) + RETRY_INTERVAL
 
     return job

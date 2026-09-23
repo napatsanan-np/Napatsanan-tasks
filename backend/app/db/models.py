@@ -1,5 +1,5 @@
 """ตารางฐานข้อมูลของฟีเจอร์จองคิวตรวจสุขภาพ (SPEC-BKG-001) — T-01"""
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
 
 from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, Time
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -7,6 +7,10 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 class Base(DeclarativeBase):
     pass
+
+
+def _utcnow() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 class Slot(Base):
@@ -34,7 +38,7 @@ class Booking(Base):
     # รูปแบบและวิธีออกเลขคิวยังไม่กำหนด รอคำตอบ Q-02 จึงเก็บเป็นช่องว่างได้ไปก่อน (ดู T-15)
     queue_no: Mapped[str | None] = mapped_column(String(20), nullable=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="confirmed")
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=_utcnow)
 
 
 class AuditLog(Base):
@@ -46,4 +50,4 @@ class AuditLog(Base):
     actor_id: Mapped[str] = mapped_column(String(50), nullable=False)
     action: Mapped[str] = mapped_column(String(50), nullable=False)
     hn: Mapped[str] = mapped_column(String(20), nullable=False)
-    accessed_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    accessed_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=_utcnow)

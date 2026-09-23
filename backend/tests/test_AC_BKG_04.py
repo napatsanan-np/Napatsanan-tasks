@@ -6,7 +6,7 @@ Then  การจองถูกบันทึก แสดงหมายเ�
 หมายเหตุ: การตรวจ "แสดงหมายเลขคิว" ตัวจริงยังทำไม่ได้ รอ Q-02 (ดู T-15, T-16) จึงตรวจเฉพาะว่าการจอง
 ถูกบันทึกสำเร็จ (มี booking id กลับมา) และมีรายการในคิวส่งซ้ำที่กำหนดส่งภายใน 5 นาที ตามที่ plan.md ข้อ 6 ระบุขอบเขตการทดสอบนี้ไว้
 """
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from datetime import time as dt_time
 
 from fastapi.testclient import TestClient
@@ -42,4 +42,4 @@ def test_AC_BKG_04(db_session, monkeypatch):
     job = jobs[0]
     assert job.status == "pending_retry"
     assert job.scheduled_at is not None
-    assert job.scheduled_at <= datetime.utcnow() + timedelta(minutes=5)
+    assert job.scheduled_at <= datetime.now(timezone.utc) + timedelta(minutes=5)
