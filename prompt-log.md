@@ -14,3 +14,18 @@
 - บันทึกไว้ใน tasks.md ว่า FR-BKG-06 ยังไม่มี AC ในสเปก จึงยังไม่มี task ทดสอบเฉพาะ ให้ทีมพิจารณาว่าจะเพิ่ม AC หรือไม่
 
 ยังไม่เริ่มลงมือทำ task ใด ๆ ตามกติกาโปรเจกต์ รอทีมสั่งแยกต่างหาก
+
+## 2569-09-23 — /implement T-01 specs/001-booking/tasks.md
+คำสั่งที่ใช้: `/implement T-01 specs/001-booking/tasks.md`
+
+ไฟล์ที่สร้าง:
+- backend/app/db/models.py (ตาม "ไฟล์ที่แตะ" ของ T-01) — ตาราง Slot, Booking, AuditLog
+- backend/app/__init__.py, backend/app/db/__init__.py — โครงพื้นฐานให้ import path `app.db.models` ใช้งานได้ ไม่ได้อยู่ในช่อง "ไฟล์ที่แตะ" ของ tasks.md แต่จำเป็นให้ "เสร็จเมื่อ" (import ได้ไม่ error) เป็นจริง
+- backend/tests/test_T01_models.py — เทสยืนยัน "เสร็จเมื่อ" (สร้างตารางได้ครบ, bookings ไม่มีคอลัมน์ national_id) ก็ไม่ได้อยู่ในช่อง "ไฟล์ที่แตะ" เช่นกัน
+
+สิ่งที่เกือบต้องเดาแต่ถามทีมแทน: tasks.md ระบุ "ไฟล์ที่แตะ" ของ T-01 ไว้แค่ backend/app/db/models.py ไฟล์เดียว
+แต่กติกา /implement ข้อ 1 บังคับให้เขียน test เล็ก ๆ ยืนยัน "เสร็จเมื่อ" เมื่อ task ไม่มี AC ตรง ๆ ซึ่งขัดกับกติกา "ห้ามแตะไฟล์นอกช่องไฟล์ที่แตะ"
+ถามทีมผ่าน AskUserQuestion แล้วได้คำตอบ: ให้สร้างไฟล์ test เพิ่ม และสร้าง __init__.py ให้ด้วย
+
+ผล test: **ยังไม่ได้รัน** เครื่องนี้ไม่มี Python ติดตั้งจริง (มีแค่ Microsoft Store alias ของ python/python3 ที่เรียกใช้ไม่ได้)
+ทีมต้องติดตั้ง Python 3.12 แล้วรัน `cd backend && pip install -r requirements.txt && pytest tests/test_T01_models.py -v` เพื่อยืนยันผลจริงก่อน commit
